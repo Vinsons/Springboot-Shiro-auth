@@ -1,0 +1,20 @@
+
+#数据库配置
+#mybatis映射路径
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.shiro.auth.pojo
+#日志记录
+logging:
+  level:
+   com.shiro.auth.*: trace
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8
+    username: root
+    password: 12345678
+server:
+  port: 8090
+
+

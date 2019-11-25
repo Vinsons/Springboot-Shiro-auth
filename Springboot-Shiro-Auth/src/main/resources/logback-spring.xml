@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!--tomcat控制台日志-->
+    <appender name="consoleLog" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>
+                %d -%msg%n
+            </pattern>
+        </layout>
+    </appender>
+
+    <!--info日志-->
+    <appender name="fileInfoLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/var/log/tomcat/agents/agents-info.log</file>
+        <!--根据范围过滤INFO级别的日志-->
+        <filter class = "ch.qos.logback.classic.filter.LevelFilter">
+            <!--匹配ERROR级别的日志-->
+            <level>ERROR</level>
+            <!--匹配到ERROR级别的日志,禁止输出-->
+            <onMatch>DENY</onMatch>
+            <!--其他级别的,接受输出-->
+            <onMismatch>ACCEPT</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>%d -%msg%n</pattern>
+        </encoder>
+        <!--滚动策略-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>/var/log/tomcat/agents/info.%d.log</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+
+    <!--error日志-->
+    <appender name="fileErrorLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/var/log/tomcat/agents/agents-error.log</file>
+        <!--根据范围过滤ERROR级别的日志-->
+        <filter class = "ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <encoder>
+            <pattern>%date{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+        <!--滚动策略-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>/var/log/tomcat/agents/error.%d.log</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="consoleLog"/>
+        <appender-ref ref="fileInfoLog"/>
+        <appender-ref ref="fileErrorLog"/>
+    </root>
+</configuration>
