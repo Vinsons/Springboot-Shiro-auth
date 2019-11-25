@@ -3,6 +3,7 @@ package com.shiro.auth.shiro;
 import com.shiro.auth.pojo.Permissions;
 import com.shiro.auth.pojo.User;
 import com.shiro.auth.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @Date 2019-11-19 11:03
  * @Version 1.0
  **/
+@Slf4j
 public class CustomRealm extends AuthorizingRealm {
 
     @Autowired
@@ -30,6 +32,7 @@ public class CustomRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
+        log.info("开始用户授权-----------------------------------");
         String name = (String) principalCollection.getPrimaryPrincipal();
         User user = userService.login(name);
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
@@ -38,9 +41,11 @@ public class CustomRealm extends AuthorizingRealm {
         //赋予角色权限
         for (Permissions ps : user.getPermissions()
                 ) {
-            simpleAuthorizationInfo.addStringPermission(ps.getPermissionsname());
+            simpleAuthorizationInfo.addStringPermission(ps.getPermissionsName());
         }
+        log.info("结束用户授权-----------------------------------");
         return simpleAuthorizationInfo;
+
     }
 
     /**
@@ -52,16 +57,17 @@ public class CustomRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
+        log.info("开始身份验证-----------------------------");
         if (null == authenticationToken.getPrincipal()) {
             throw new IncorrectCredentialsException("token失效了");
         }
         String name = (String) authenticationToken.getPrincipal();
-
         User user = userService.login(name);
         if (null == user) {
             throw new UnknownAccountException("用户不存在");
         } else {
             SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(name, user.getPassword(), getName());
+            log.info("结束身份验证-----------------------------");
             return simpleAuthenticationInfo;
         }
     }

@@ -23,12 +23,13 @@ public class UserController {
     UserService userService;
 
     @GetMapping(value = "/login")
-    public User login(@RequestParam("username") String username,@RequestParam("passsword") String password) throws Exception{
+    public User login(@RequestParam("username") String username,@RequestParam("password") String password) throws Exception{
         User user = userService.login(username);
-        if (!password.equals(user.getPassword())){
-            throw new Exception("密码不正确!");
-        }else {
-         return user;
-        }
+//        if (!password.equals(user.getPassword())){
+//            return null;
+//        }else {
+//         return user;
+//        }
+        return user;
     }
 }

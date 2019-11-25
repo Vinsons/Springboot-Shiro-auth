@@ -13,8 +13,16 @@ import lombok.Data;
 public class Permissions {
     private Integer id;
 
-    private String permissionsname;
+    private String permissionsName;
 
     private Integer roleid;
 
+    public Permissions() {
+    }
+
+    public Permissions(Integer id, String permissionsName, Integer roleid) {
+        this.id = id;
+        this.permissionsName = permissionsName;
+        this.roleid = roleid;
+    }
 }
